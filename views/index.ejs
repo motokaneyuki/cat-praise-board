@@ -1,5 +1,12 @@
 <html>
     <body>
         <%= message %>
+        <div>
+            <% praises.map((praise) => { %>
+                <p>"<%= praise.text %>"</p>
+                <p>from <%= praise.user %></p>
+                <p><%= praise.date %></p>
+            <% }) %>
+        </div>
     </body>
 </html>
