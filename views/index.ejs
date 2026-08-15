@@ -1,11 +1,12 @@
 <html>
     <body>
-        <%= message %>
+        <h1><%= message %></h1>
         <div>
-            <% praises.map((praise) => { %>
+            <% praises.forEach((praise) => { %>
                 <p>"<%= praise.text %>"</p>
                 <p>from <%= praise.user %></p>
-                <p><%= praise.date %></p>
+                <p>sent <%= praise.date.toLocaleDateString() %></p>
+                <hr>
             <% }) %>
         </div>
         <nav>
