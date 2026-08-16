@@ -9,3 +9,4 @@ There is no custom styling applied to keep the focus entirely on server-side log
 - Handling `GET` and `POST` requests.
 - Using route parameters to display individual item details.
 - Rendering dynamic server-side templates with EJS.
+- Input validation & sanitization using `express-validator`.

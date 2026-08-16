@@ -1,14 +1,15 @@
 <html>
     <body>
         <h1>send a praise to the cutest cat in the world</h1>
+        <%- include('partials/errors.ejs') %>
         <form method="POST" action="/new">
             <div>
                 <label for="name">name:</label>
-                <input id="name" name="name" type="text">
+                <input id="name" name="name" type="text" required>
             </div>
             <div>
                 <label for="praise">message:</label>
-                <input id="praise" name="praise" type="text">
+                <input id="praise" name="praise" type="text" required>
             </div>
             <button>send</button>
         </form>

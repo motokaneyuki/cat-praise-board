@@ -1,4 +1,5 @@
 import { randomUUID } from "node:crypto";
+import { body, validationResult, matchedData } from "express-validator";
 
 const praises = [
   {
@@ -15,6 +16,17 @@ const praises = [
   }
 ];
 
+const alphaErr = 'must only contain letters.';
+const lengthErr = 'must be between 1 and 10 characters.';
+
+const validatePraise = [
+    body('name').trim()
+    .isAlpha().withMessage(`Name ${alphaErr}`)
+    .isLength({ min: 1, max: 10}).withMessage(`Name ${lengthErr}`),
+    body('praise').trim()
+    .isLength({ min:1, max: 100}).withMessage('Praise must be within 100 characters. Moo does not have the patience for more.'),
+];
+
 export const getPraises = (req, res) => {
     res.render('index', { message: 'hello moo, the greatest cat!', praises: praises });
 }
@@ -23,10 +35,21 @@ export const getForm = (req, res) => {
     res.render('form');
 }
 
-export const createPraise = (req, res) => {
-    praises.push({ text: req.body.praise, user: req.body.name, date: new Date(), id: crypto.randomUUID() });
-    res.redirect('/');
-}
+export const createPraise = [
+    validatePraise,
+    (req, res) => {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()){
+            return res.status(400).render('form', {
+                errors: errors.array(),
+            });
+        }
+
+        const { praise, name } = matchedData(req);
+        praises.push({ text: praise, user: name, date: new Date(), id: crypto.randomUUID() });
+        res.redirect('/');
+    }
+]
 
 export const getPraiseById = (req, res) => {
     const { id } = req.params;
