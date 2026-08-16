@@ -20,6 +20,10 @@ export const getPraises = (req, res) => {
     res.render('index', { message: 'hello moo, the greatest cat!', praises: praises });
 }
 
+export const getForm = (req, res) => {
+    res.render('form');
+}
+
 //for creating praises
 
 const alphaErr = 'must only contain letters.';
@@ -32,10 +36,6 @@ const validatePraise = [
     body('praise').trim()
     .isLength({ min:1, max: 100}).withMessage('Praise must be within 100 characters. Moo does not have the patience for more.'),
 ];
-
-export const getForm = (req, res) => {
-    res.render('form');
-}
 
 export const createPraise = [
     validatePraise,
@@ -103,3 +103,18 @@ export const updatePraiseById = [
         res.redirect('/');
     }
 ]
+
+//for deleting praises
+
+export const deletePraise = (req, res) => {
+    const { id } = req.params;
+    const selectedPraiseIndex = praises.findIndex((praise) => praise.id == id);
+
+    if (selectedPraiseIndex === -1) {
+        return res.status(404).send('Praise not found');
+    }
+
+    praises.splice(selectedPraiseIndex, 1);
+
+    res.redirect('/');
+}

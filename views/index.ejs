@@ -6,8 +6,11 @@
                 <p>"<%= praise.text %>"</p>
                 <p>from <%= praise.user %></p>
                 <p>sent <%= praise.date.toLocaleDateString() %></p>
-                <a href="/message/<%= praise.id %>">open</a>
-                <a href="/update/<%= praise.id %>">update</a>
+                <button><a href="/message/<%= praise.id %>">open</a></button>
+                <button><a href="/update/<%= praise.id %>">update</a></button>
+                <form action="/delete/<%= praise.id %>" method="POST" style="display:inline;">
+                    <button type="submit" onclick="return confirm('are you sure you want to delete this praise?');">delete</button>
+                </form>
                 <hr>
             <% }) %>
         </div>
