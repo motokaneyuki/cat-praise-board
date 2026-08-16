@@ -7,6 +7,7 @@
                 <p>from <%= praise.user %></p>
                 <p>sent <%= praise.date.toLocaleDateString() %></p>
                 <a href="/message/<%= praise.id %>">open</a>
+                <a href="/update/<%= praise.id %>">update</a>
                 <hr>
             <% }) %>
         </div>

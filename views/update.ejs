@@ -1,0 +1,20 @@
+<html>
+    <body>
+        <h1>update your praise to the cutest cat in the world</h1>
+        <%- include('partials/errors.ejs') %>
+        <form method="POST" action="/update/<%= message.id %>">
+            <div>
+                <label for="name">name:</label>
+                <input id="name" name="name" value="<%= message.user %>" type="text" required>
+            </div>
+            <div>
+                <label for="praise">message:</label>
+                <input id="praise" name="praise" value="<%= message.text %>" type="text" required>
+            </div>
+            <button>update</button>
+        </form>
+        <nav>
+            <a href="/">return</a>
+        </nav>
+    </body>
+</html>
