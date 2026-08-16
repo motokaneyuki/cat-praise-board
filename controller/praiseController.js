@@ -118,3 +118,13 @@ export const deletePraise = (req, res) => {
 
     res.redirect('/');
 }
+
+//for searching
+
+export const getNamePraiseList = (req, res) => {
+    const searchedName = req.query.search;
+
+    const results = praises.filter((praise) => praise.user.toLowerCase() === searchedName.toLowerCase());
+
+    res.render('search', { search: searchedName, results: results });
+}

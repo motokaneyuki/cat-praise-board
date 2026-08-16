@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createPraise, getUpdateForm, updatePraiseById, deletePraise, getForm, getPraiseById, getPraises } from "../controller/praiseController.js";
+import { createPraise, getUpdateForm, updatePraiseById, deletePraise, getForm, getPraiseById, getPraises, getNamePraiseList } from "../controller/praiseController.js";
 
 export const indexRouter = Router();
 
@@ -15,3 +15,5 @@ indexRouter.get('/update/:id', getUpdateForm);
 indexRouter.post('/update/:id', updatePraiseById);
 
 indexRouter.post('/delete/:id', deletePraise);
+
+indexRouter.get('/search', getNamePraiseList);
