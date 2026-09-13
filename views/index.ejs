@@ -4,7 +4,7 @@
         <div>
             <% praises.forEach((praise) => { %>
                 <p>"<%= praise.text %>"</p>
-                <p>from <%= praise.user %></p>
+                <p>from <%= praise.username %></p>
                 <p>sent <%= praise.date.toLocaleDateString() %></p>
                 <button><a href="/message/<%= praise.id %>">open</a></button>
                 <button><a href="/update/<%= praise.id %>">update</a></button>

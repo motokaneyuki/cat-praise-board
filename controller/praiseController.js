@@ -1,30 +1,16 @@
-import { randomUUID } from "node:crypto";
 import { body, validationResult, matchedData } from "express-validator";
+import { getAllPraises, addPraise, findPraiseByUser, deletePraiseById, findSpecificPraise, updatePraiseByUser } from "../db/queries.js";
 
-const praises = [
-  {
-    text: "You are the cutest fluffball!",
-    user: "Yuki",
-    date: new Date(),
-    id: randomUUID(),
-  },
-  {
-    text: "Best cat evurrr!",
-    user: "Yuki",
-    date: new Date(),
-    id: randomUUID(),
-  }
-];
-
-export const getPraises = (req, res) => {
-    res.render('index', { message: 'hello moo, the greatest cat!', praises: praises });
+export async function getPraises(req, res) {
+    const praiseRows = await getAllPraises();
+    res.render('index', { message: 'hello moo, the greatest cat!', praises: praiseRows });
 }
 
 export const getForm = (req, res) => {
     res.render('form');
 }
 
-//for creating praises
+// for creating praises
 
 const alphaErr = 'must only contain letters.';
 const lengthErr = 'must be between 1 and 10 characters.';
@@ -39,7 +25,7 @@ const validatePraise = [
 
 export const createPraise = [
     validatePraise,
-    (req, res) => {
+    async (req, res) => {
         const errors = validationResult(req);
         if (!errors.isEmpty()){
             return res.status(400).render('form', {
@@ -48,14 +34,15 @@ export const createPraise = [
         }
 
         const { praise, name } = matchedData(req);
-        praises.push({ text: praise, user: name, date: new Date(), id: randomUUID() });
+        const date = new Date();
+        await addPraise(name, praise, date);
         res.redirect('/');
     }
 ]
 
-export const getPraiseById = (req, res) => {
+export const getPraiseById = async (req, res) => {
     const { id } = req.params;
-    const message = praises.find((praise) => praise.id == id);
+    const message = await findSpecificPraise(id);
 
     if (!message) {
         res.status(404).send('Praise not found');
@@ -67,9 +54,9 @@ export const getPraiseById = (req, res) => {
 
 //for updating praises
 
-export const getUpdateForm = (req, res) => {
+export const getUpdateForm = async (req, res) => {
     const { id } = req.params;
-    const message = praises.find((praise) => praise.id == id);
+    const message = await findSpecificPraise(id);
 
     if (!message) {
         return res.status(404).send('Praise not found');
@@ -80,29 +67,20 @@ export const getUpdateForm = (req, res) => {
 
 export const updatePraiseById = [
     validatePraise,
-    (req, res) => {
+    async (req, res) => {
         const { id } = req.params;
-        const updatedPraise = praises.find((praise) => praise.id == id);
-
-        if (!updatedPraise) {
-            res.status(404).send('Praise not found');
-            return;
-        }
 
         const errors = validationResult(req);
         if (!errors.isEmpty()){
             return res.status(400).render('update', {
                 errors: errors.array(),
-                message: updatedPraise,
+                message: { id: id, text: req.body.praise, user: req.body.name },
             });
         }
 
         const { praise, name } = matchedData(req);
-        if (updatedPraise) {
-            updatedPraise.text = praise;
-            updatedPraise.user = name;
-            updatedPraise.date = new Date();
-        }
+        const date = new Date();
+        await updatePraiseByUser(name, praise, date, id);
 
         res.redirect('/');
     }
@@ -110,25 +88,17 @@ export const updatePraiseById = [
 
 //for deleting praises
 
-export const deletePraise = (req, res) => {
+export const deletePraise = async (req, res) => {
     const { id } = req.params;
-    const selectedPraiseIndex = praises.findIndex((praise) => praise.id == id);
-
-    if (selectedPraiseIndex === -1) {
-        return res.status(404).send('Praise not found');
-    }
-
-    praises.splice(selectedPraiseIndex, 1);
-
+    await deletePraiseById(id);
     res.redirect('/');
 }
 
 //for searching
 
-export const getNamePraiseList = (req, res) => {
+export const getNamePraiseList = async (req, res) => {
     const searchedName = req.query.search;
-
-    const results = praises.filter((praise) => praise.user.toLowerCase() === searchedName.toLowerCase());
-
+    const results = await findPraiseByUser(searchedName);
+    console.log(results);
     res.render('search', { search: searchedName, results: results });
 }

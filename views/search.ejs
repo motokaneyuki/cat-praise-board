@@ -7,7 +7,7 @@
             <div>
                 <% results.forEach((result) => { %>
                     <p>"<%= result.text %>"</p>
-                    <p>from <%= result.user %></p>
+                    <p>from <%= result.username %></p>
                     <p>sent <%= result.date.toLocaleDateString() %></p>
                     <button><a href="/message/<%= result.id %>">open</a></button>
                     <button><a href="/update/<%= result.id %>">update</a></button>
