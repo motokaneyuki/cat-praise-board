@@ -102,8 +102,14 @@ export const deletePraise = async (req, res) => {
 //for searching
 
 export const getNamePraiseList = async (req, res) => {
-    const searchedName = req.query.search;
+    const searchedName = req.query.search?.trim();
+
+    if (!searchedName) {
+        return res.status(400).render('search', {
+            errors: [{ message: 'Please provide a name to search for.' }],
+        });
+    }
+
     const results = await findPraiseByUser(searchedName);
-    console.log(results);
     res.render('search', { search: searchedName, results: results });
 }

@@ -1,22 +1,25 @@
 <html>
     <body>
-        <h1>results for praises sung by <%= search %></h1>
-        <% if (results.length === 0) { %>
-            <%- include('partials/emptySearch.ejs') %>
-        <% } else { %>
-            <div>
-                <% results.forEach((result) => { %>
-                    <p>"<%= result.text %>"</p>
-                    <p>from <%= result.username %></p>
-                    <p>sent <%= result.date.toLocaleDateString() %></p>
-                    <button><a href="/message/<%= result.id %>">open</a></button>
-                    <button><a href="/update/<%= result.id %>">update</a></button>
-                    <form action="/delete/<%= result.id %>" method="POST" style="display:inline;">
-                        <button type="submit" onclick="return confirm('are you sure you want to delete this praise?');">delete</button>
-                    </form>
-                    <hr>
-                <% }) %>
-            </div>
+        <%- include('partials/errors.ejs') %>
+        <% if (search) { %>
+            <h1>results for praises sung by <%= search %></h1>
+            <% if (results.length === 0) { %>
+                <%- include('partials/emptySearch.ejs') %>
+            <% } else { %>
+                <div>
+                    <% results.forEach((result) => { %>
+                        <p>"<%= result.text %>"</p>
+                        <p>from <%= result.username %></p>
+                        <p>sent <%= result.date.toLocaleDateString() %></p>
+                        <button><a href="/message/<%= result.id %>">open</a></button>
+                        <button><a href="/update/<%= result.id %>">update</a></button>
+                        <form action="/delete/<%= result.id %>" method="POST" style="display:inline;">
+                            <button type="submit" onclick="return confirm('are you sure you want to delete this praise?');">delete</button>
+                        </form>
+                        <hr>
+                    <% }) %>
+                </div>
+            <% } %>
         <% } %>
         <br>
         <nav>
