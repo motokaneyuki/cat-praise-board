@@ -90,7 +90,12 @@ export const updatePraiseById = [
 
 export const deletePraise = async (req, res) => {
     const { id } = req.params;
-    await deletePraiseById(id);
+    const deleted = await deletePraiseById(id);
+
+    if (deleted === 0) {
+        return res.status(404).send('Praise not found');
+    }
+
     res.redirect('/');
 }
 

@@ -16,7 +16,8 @@ export async function findPraiseByUser(searchedName) {
 }
 
 export async function deletePraiseById(id) {
-    await pool.query('DELETE FROM praises WHERE praises.id = $1', [id]);
+    const result = await pool.query('DELETE FROM praises WHERE praises.id = $1', [id]);
+    return result.rowCount;
 }
 
 
