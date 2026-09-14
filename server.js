@@ -18,3 +18,14 @@ app.set('view engine', 'ejs');
 app.use(express.urlencoded({ extended: true }));
 
 app.use('/', indexRouter);
+
+app.use((error, req, res, next) => {
+    console.error(error);
+
+    // invalid value format, such as a non-numeric ID
+    if (error.code === '22P02') {
+        return res.status(400).send('Invalid praise ID.');
+    }
+
+    res.status(500).send('Something went wrong.');
+});
