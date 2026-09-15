@@ -1,5 +1,8 @@
 import express from 'express';
 import path from 'node:path';
+import session from 'express-session';
+import passport from 'passport';
+import { Strategy as LocalStrategy } from 'passport-local';
 import { indexRouter } from './routes/indexRouter.js';
 
 const app = express();
@@ -16,6 +19,10 @@ app.listen(PORT, (error) => {
 app.set('views', path.join(import.meta.dirname, 'views'));
 app.set('view engine', 'ejs');
 app.use(express.urlencoded({ extended: true }));
+
+app.use(session({ secret: 'cats', resave: false, saveUninitialized: false }));
+app.use(passport.session());
+app.use(express.urlencoded({ extended: false }));
 
 app.use('/', indexRouter);
 
