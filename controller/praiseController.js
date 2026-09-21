@@ -113,3 +113,7 @@ export const getNamePraiseList = async (req, res) => {
     const results = await findPraiseByUser(searchedName);
     res.render('search', { search: searchedName, results: results });
 }
+
+export const getSignUpForm = (req, res) => {
+    res.render('sign-up-form');
+}
